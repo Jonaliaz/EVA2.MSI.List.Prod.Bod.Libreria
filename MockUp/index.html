@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Gran Poeta — Sistema de Inventario y Bodegas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <span class="logo-box">GP</span>
+          <div class="brand-text">
+            <span class="brand-name">El Gran Poeta</span>
+            <span class="brand-subtitle">INVENTARIO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section-label">OPERACIÓN</div>
+
+      <nav class="sidebar-nav">
+        <a href="#resumen" class="nav-item active" data-view="resumen">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+          </svg>
+          <span>Resumen</span>
+        </a>
+
+        <a href="#productos" class="nav-item" data-view="productos">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10M6 10h10"></path>
+          </svg>
+          <span>Productos</span>
+        </a>
+
+        <a href="#bodegas" class="nav-item" data-view="bodegas">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4M9 21V11h6v10"></path>
+          </svg>
+          <span>Bodegas</span>
+        </a>
+
+        <a href="#traslados" class="nav-item" data-view="traslados">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"></path>
+          </svg>
+          <span>Traslados</span>
+        </a>
+
+        <a href="#informes" class="nav-item" data-view="informes">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 20V10M12 20V4M6 20v-6"></path>
+          </svg>
+          <span>Informes</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-help">
+        <div class="help-card">
+          <div class="help-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="help-text">
+            <h4>Centro de ayuda</h4>
+            <p>Guías de inventario, movimientos y cierres.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-user" id="userProfileBtn">
+        <div class="user-avatar">MH</div>
+        <div class="user-info">
+          <span class="user-name">Marina Herrera</span>
+          <span class="user-role">Jefa de bodega · Centro</span>
+        </div>
+        <svg class="user-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path>
+        </svg>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="branch-selector">
+            <svg class="branch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 2a10 10 0 0 0-10 10c0 5.25 7 10 10 10s10-4.75 10-10A10 10 0 0 0 12 2z"></path>
+            </svg>
+            <select id="globalBranchSelect">
+              <option value="all">Todas las sucursales</option>
+              <option value="centro">Bodega Centro (BD-001)</option>
+              <option value="norte">Bodega Norte (BD-002)</option>
+              <option value="providencia">Sucursal Providencia (BD-003)</option>
+              <option value="sur">Bodega Sur (BD-004)</option>
+            </select>
+            <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="current-date">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span id="headerDate">30 sep 2026</span>
+          </div>
+
+          <button class="icon-button notification-btn" id="notifBellBtn" title="Alertas y Notificaciones">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="notification-badge">3</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW CONTAINER -->
+      <main class="content-area">
+        <!-- ============================================== -->
+        <!-- SCREEN 1: RESUMEN OPERATIVO                    -->
+        <!-- ============================================== -->
+        <section id="view-resumen" class="view-pane active">
+          <div class="view-header">
+            <div class="header-titles">
+              <span class="date-badge">MIÉRCOLES, 30 DE SEPTIEMBRE</span>
+              <h1 class="page-title">Resumen operativo</h1>
+              <p class="page-subtitle">Una lectura clara del inventario y la actividad de todas las sucursales.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-primary" id="btnOpenTransferModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Registrar movimiento</span>
+              </button>
+              <button class="btn btn-outline" id="btnQuickAlerts">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span>Ver alertas</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Unidades en stock</span>
+                <div class="kpi-icon-box bg-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiTotalStock">18.642</div>
+              <div class="kpi-trend positive">
+                <span>+426 este mes</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Productos activos</span>
+                <div class="kpi-icon-box bg-slate">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <path d="M3 9h18M9 21V9"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiActiveProducts">3.284</div>
+              <div class="kpi-trend neutral">
+                <span>12 nuevas altas</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Stock bajo</span>
+                <div class="kpi-icon-box bg-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value warning-text" id="kpiLowStock">47</div>
+              <div class="kpi-trend warning">
+                <span>9 requieren atención</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Traslados en curso</span>
+                <div class="kpi-icon-box bg-blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="3" width="15" height="13"></rect>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiPendingTransfers">8</div>
+              <div class="kpi-trend neutral">
+                <span>3 llegan hoy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Layout Grid -->
+          <div class="dashboard-grid">
+            <!-- Left Column: Alertas + Movimientos -->
+            <div class="dashboard-col">
+              <!-- Alertas de Stock -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Alertas de stock</h3>
+                    <p class="card-subtitle">Productos por debajo del umbral definido</p>
+                  </div>
+                  <a href="#productos" class="card-link" data-view="productos">Ver 47 alertas</a>
+                </div>
+                <div class="stock-alerts-list">
+                  <div class="alert-row">
+                    <div class="alert-icon-wrap rose">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path></svg>
+                    </div>
+                    <div class="alert-content">
+                      <div class="alert-title">La vegetariana</div>
+                      <div class="alert-meta">Bodega Centro · <span class="highlight-warn">quedan 2 unidades</span></div>
+                    </div>
+                    <span class="badge badge-critical">Crítico</span>
+                  </div>
+
+                  <div class="alert-row">
+                    <div class="alert-icon-wrap amber">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path></svg>
+                    </div>
+                    <div class="alert-content">
+                      <div class="alert-title">Cien años de soledad</div>
+                      <div class="alert-meta">Sucursal Providencia · <span class="highlight-warn">quedan 5 unidades</span></div>
+                    </div>
+                    <span class="badge badge-warning">Bajo</span>
+                  </div>
+
+                  <div class="alert-row">
+                    <div class="alert-icon-wrap amber">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path></svg>
+                    </div>
+                    <div class="alert-content">
+                      <div class="alert-title">El infinito en un junco</div>
+                      <div class="alert-meta">Bodega Norte · <span class="highlight-neutral">sin reposición programada</span></div>
+                    </div>
+                    <span class="badge badge-warning">Bajo</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Movimientos Recientes -->
+              <div class="card mt-4">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Movimientos recientes</h3>
+                    <p class="card-subtitle">Últimas actualizaciones registradas</p>
+                  </div>
+                  <a href="#informes" class="card-link" data-view="informes">Ver historial</a>
+                </div>
+                <div class="movement-feed">
+                  <div class="feed-item">
+                    <div class="feed-time">10:42</div>
+                    <div class="feed-info">
+                      <div class="feed-header">
+                        <span class="feed-code">TR-0284</span>
+                        <span class="feed-route">Bodega Centro &rarr; Providencia</span>
+                      </div>
+                      <div class="feed-details">24 productos · 68 unidades · Diego Soto</div>
+                    </div>
+                    <span class="badge badge-transfer">Traslado</span>
+                  </div>
+
+                  <div class="feed-item">
+                    <div class="feed-time">09:18</div>
+                    <div class="feed-info">
+                      <div class="feed-header">
+                        <span class="feed-code">IN-0917</span>
+                        <span class="feed-route">Ingreso Editorial Anagrama</span>
+                      </div>
+                      <div class="feed-details">12 productos · 120 unidades · Marina Herrera</div>
+                    </div>
+                    <span class="badge badge-success">Ingreso</span>
+                  </div>
+
+                  <div class="feed-item">
+                    <div class="feed-time">Ayer</div>
+                    <div class="feed-info">
+                      <div class="feed-header">
+                        <span class="feed-code">AJ-0441</span>
+                        <span class="feed-route">Ajuste de inventario</span>
+                      </div>
+                      <div class="feed-details">Bodega Norte · -3 unidades · Paula León</div>
+                    </div>
+                    <span class="badge badge-neutral">Ajuste</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Distribución + Cierre -->
+            <div class="dashboard-col">
+              <!-- Distribución por Bodega -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Distribución por bodega</h3>
+                    <p class="card-subtitle">18.642 unidades disponibles</p>
+                  </div>
+                </div>
+                <!-- Visual Multi-segment Bar -->
+                <div class="distribution-bar">
+                  <div class="dist-segment seg-centro" style="width: 42%;" title="Bodega Centro: 42%"></div>
+                  <div class="dist-segment seg-norte" style="width: 26%;" title="Bodega Norte: 26%"></div>
+                  <div class="dist-segment seg-providencia" style="width: 19%;" title="Providencia: 19%"></div>
+                  <div class="dist-segment seg-sur" style="width: 13%;" title="Bodega Sur: 13%"></div>
+                </div>
+
+                <div class="distribution-table">
+                  <div class="dist-row">
+                    <div class="dist-name">
+                      <span class="dot dot-centro"></span>
+                      <span>Bodega Centro</span>
+                    </div>
+                    <span class="dist-units">7.860</span>
+                    <span class="dist-pct">42%</span>
+                  </div>
+                  <div class="dist-row">
+                    <div class="dist-name">
+                      <span class="dot dot-norte"></span>
+                      <span>Bodega Norte</span>
+                    </div>
+                    <span class="dist-units">4.932</span>
+                    <span class="dist-pct">26%</span>
+                  </div>
+                  <div class="dist-row">
+                    <div class="dist-name">
+                      <span class="dot dot-providencia"></span>
+                      <span>Providencia</span>
+                    </div>
+                    <span class="dist-units">3.518</span>
+                    <span class="dist-pct">19%</span>
+                  </div>
+                  <div class="dist-row">
+                    <div class="dist-name">
+                      <span class="dot dot-sur"></span>
+                      <span>Bodega Sur</span>
+                    </div>
+                    <span class="dist-units">2.332</span>
+                    <span class="dist-pct">13%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dark Card: Cierre de inventario -->
+              <div class="card dark-card mt-4">
+                <div class="dark-card-tag">PRÓXIMO HITO</div>
+                <h3 class="dark-card-title">Cierre de inventario</h3>
+                <p class="dark-card-desc">Faltan 2 días. Hay 3 bodegas con conteos pendientes de validación.</p>
+                <div class="progress-container">
+                  <div class="progress-labels">
+                    <span>Avance</span>
+                    <span class="progress-value">76%</span>
+                  </div>
+                  <div class="progress-track">
+                    <div class="progress-fill" style="width: 76%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- SCREEN 2: CATÁLOGO DE PRODUCTOS               -->
+        <!-- ============================================== -->
+        <section id="view-productos" class="view-pane">
+          <div class="view-header">
+            <div class="header-titles">
+              <span class="date-badge">3.284 PRODUCTOS ACTIVOS</span>
+              <h1 class="page-title">Catálogo de productos</h1>
+              <p class="page-subtitle">Consulta existencias, ubicación y ficha editorial en un mismo lugar.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-primary" id="btnOpenNewProductModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Registrar producto</span>
+              </button>
+              <button class="btn btn-outline" id="btnImportCSV">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span>Importar CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search and Filter Bar -->
+          <div class="filters-card">
+            <div class="filters-top-row">
+              <div class="search-input-wrap">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="productSearchInput" placeholder="Título, ISBN, autor o editorial..." autocomplete="off">
+                <kbd class="shortcut-badge">⌘ K</kbd>
+              </div>
+
+              <div class="filter-dropdown-group">
+                <div class="filter-field">
+                  <label>Tipo</label>
+                  <select id="filterType">
+                    <option value="">Todos los tipos</option>
+                    <option value="Novela">Novela</option>
+                    <option value="Ensayo">Ensayo</option>
+                    <option value="Memoria">Memoria</option>
+                    <option value="Poesía">Poesía</option>
+                    <option value="Infantil">Infantil</option>
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label>Editorial</label>
+                  <select id="filterEditorial">
+                    <option value="">Todas</option>
+                    <option value="Random House">Random House</option>
+                    <option value="Cátedra">Cátedra</option>
+                    <option value="Siruela">Siruela</option>
+                    <option value="Alfaguara">Alfaguara</option>
+                    <option value="Tusquets">Tusquets</option>
+                    <option value="Anagrama">Anagrama</option>
+                  </select>
+                </div>
+
+                <div class="filter-field">
+                  <label>Bodega</label>
+                  <select id="filterBodega">
+                    <option value="">Todas</option>
+                    <option value="Centro">Bodega Centro</option>
+                    <option value="Norte">Bodega Norte</option>
+                    <option value="Providencia">Providencia</option>
+                    <option value="Sur">Bodega Sur</option>
+                  </select>
+                </div>
+
+                <button class="icon-filter-btn" id="btnFilterToggle" title="Filtros avanzados">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="active-filters-row">
+              <span class="results-count" id="productCountLabel">248 resultados</span>
+              <div class="chips-container" id="activeFilterChips">
+                <span class="filter-chip">
+                  Estado: activos
+                  <button class="chip-remove">&times;</button>
+                </span>
+              </div>
+              <button class="btn-link" id="btnClearFilters">Limpiar filtros</button>
+            </div>
+          </div>
+
+          <!-- Products Table Card -->
+          <div class="card table-card mt-4">
+            <div class="card-header table-card-header">
+              <h3 class="card-title">Productos</h3>
+              <div class="view-toggle">
+                <span>Vista cómoda</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                  <line x1="3" y1="15" x2="21" y2="15"></line>
+                </svg>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table" id="productsTable">
+                <thead>
+                  <tr>
+                    <th>PRODUCTO</th>
+                    <th>AUTOR(ES)</th>
+                    <th>EDITORIAL / TIPO</th>
+                    <th>STOCK</th>
+                    <th>BODEGA</th>
+                    <th>ESTADO</th>
+                    <th class="text-right">ACCIONES</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <!-- Injected via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-pagination">
+              <span class="pagination-info" id="paginationInfo">Mostrando 1–6 de 248 productos</span>
+              <div class="pagination-controls">
+                <button class="page-btn" id="btnPrevPage">Anterior</button>
+                <div class="page-numbers" id="paginationNumbers">
+                  <button class="page-num active">1</button>
+                  <button class="page-num">2</button>
+                  <button class="page-num">3</button>
+                </div>
+                <button class="page-btn" id="btnNextPage">Siguiente</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- SCREEN 3: GESTIÓN DE BODEGAS                   -->
+        <!-- ============================================== -->
+        <section id="view-bodegas" class="view-pane">
+          <div class="view-header">
+            <div class="header-titles">
+              <span class="date-badge">4 UBICACIONES ACTIVAS</span>
+              <h1 class="page-title">Gestión de bodegas</h1>
+              <p class="page-subtitle">Capacidad, responsables y existencias de cada punto de almacenamiento.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-primary" id="btnOpenNewBodegaModal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Registrar bodega</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Bodega Cards Row -->
+          <div class="bodegas-grid" id="bodegasCardsGrid">
+            <!-- Bodega Centro -->
+            <div class="bodega-card selected" data-bodega="centro">
+              <div class="bodega-card-header">
+                <div>
+                  <h3 class="bodega-name">Bodega Centro</h3>
+                  <span class="bodega-code">BD-001</span>
+                </div>
+                <span class="selected-pill">Seleccionada</span>
+              </div>
+              <div class="bodega-location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>Santiago Centro</span>
+              </div>
+              <div class="bodega-capacity-info">
+                <span class="bold-val">7.860 unidades</span>
+                <span class="muted-val">de 10.000</span>
+              </div>
+              <div class="bodega-progress">
+                <div class="fill" style="width: 78.6%;"></div>
+              </div>
+              <div class="bodega-card-footer">
+                <div class="responsible-person">
+                  <div class="avatar-small">MH</div>
+                  <div>
+                    <div class="person-name">Marina Herrera</div>
+                    <div class="person-role">Jefa de bodega</div>
+                  </div>
+                </div>
+                <div class="alert-counter">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg>
+                  <span>14</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bodega Norte -->
+            <div class="bodega-card" data-bodega="norte">
+              <div class="bodega-card-header">
+                <div>
+                  <h3 class="bodega-name">Bodega Norte</h3>
+                  <span class="bodega-code">BD-002</span>
+                </div>
+              </div>
+              <div class="bodega-location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>Huechuraba</span>
+              </div>
+              <div class="bodega-capacity-info">
+                <span class="bold-val">4.932 unidades</span>
+                <span class="muted-val">de 7.500</span>
+              </div>
+              <div class="bodega-progress">
+                <div class="fill" style="width: 65.7%;"></div>
+              </div>
+              <div class="bodega-card-footer">
+                <div class="responsible-person">
+                  <div class="avatar-small">SM</div>
+                  <div>
+                    <div class="person-name">Sergio Muñoz</div>
+                    <div class="person-role">Jefe de bodega</div>
+                  </div>
+                </div>
+                <div class="alert-counter">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg>
+                  <span>9</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Providencia -->
+            <div class="bodega-card" data-bodega="providencia">
+              <div class="bodega-card-header">
+                <div>
+                  <h3 class="bodega-name">Providencia</h3>
+                  <span class="bodega-code">BD-003</span>
+                </div>
+              </div>
+              <div class="bodega-location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>Av. Providencia 1450</span>
+              </div>
+              <div class="bodega-capacity-info">
+                <span class="bold-val">3.518 unidades</span>
+                <span class="muted-val">de 5.000</span>
+              </div>
+              <div class="bodega-progress">
+                <div class="fill" style="width: 70.3%;"></div>
+              </div>
+              <div class="bodega-card-footer">
+                <div class="responsible-person">
+                  <div class="avatar-small">PL</div>
+                  <div>
+                    <div class="person-name">Paula León</div>
+                    <div class="person-role">Bodeguera</div>
+                  </div>
+                </div>
+                <div class="alert-counter">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg>
+                  <span>11</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bodega Sur -->
+            <div class="bodega-card" data-bodega="sur">
+              <div class="bodega-card-header">
+                <div>
+                  <h3 class="bodega-name">Bodega Sur</h3>
+                  <span class="bodega-code">BD-004</span>
+                </div>
+              </div>
+              <div class="bodega-location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>La Cisterna</span>
+              </div>
+              <div class="bodega-capacity-info">
+                <span class="bold-val">2.332 unidades</span>
+                <span class="muted-val">de 4.000</span>
+              </div>
+              <div class="bodega-progress">
+                <div class="fill" style="width: 58.3%;"></div>
+              </div>
+              <div class="bodega-card-footer">
+                <div class="responsible-person">
+                  <div class="avatar-small">DS</div>
+                  <div>
+                    <div class="person-name">Diego Soto</div>
+                    <div class="person-role">Bodeguero</div>
+                  </div>
+                </div>
+                <div class="alert-counter">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg>
+                  <span>13</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bodega Details Section -->
+          <div class="bodega-detail-grid mt-4">
+            <!-- Left: Breakdown Table -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title" id="selectedBodegaInventoryTitle">Inventario de Bodega Centro</h3>
+                  <p class="card-subtitle">Actualizado hoy a las 10:42</p>
+                </div>
+                <a href="#productos" class="card-link" data-view="productos">Consultar productos</a>
+              </div>
+              <div class="table-responsive">
+                <table class="breakdown-table">
+                  <thead>
+                    <tr>
+                      <th>CATEGORÍA</th>
+                      <th>PRODUCTOS</th>
+                      <th>UNIDADES</th>
+                      <th>% STOCK</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bodegaBreakdownBody">
+                    <tr>
+                      <td class="category-name">Novela</td>
+                      <td>1.284</td>
+                      <td class="units-val">3.420</td>
+                      <td>
+                        <div class="stock-bar-cell">
+                          <div class="mini-bar-track">
+                            <div class="mini-bar-fill" style="width: 44%;"></div>
+                          </div>
+                          <span>44%</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="category-name">Ensayo</td>
+                      <td>642</td>
+                      <td class="units-val">1.860</td>
+                      <td>
+                        <div class="stock-bar-cell">
+                          <div class="mini-bar-track">
+                            <div class="mini-bar-fill" style="width: 24%;"></div>
+                          </div>
+                          <span>24%</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="category-name">Poesía</td>
+                      <td>488</td>
+                      <td class="units-val">1.210</td>
+                      <td>
+                        <div class="stock-bar-cell">
+                          <div class="mini-bar-track">
+                            <div class="mini-bar-fill" style="width: 15%;"></div>
+                          </div>
+                          <span>15%</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="category-name">Infantil</td>
+                      <td>390</td>
+                      <td class="units-val">920</td>
+                      <td>
+                        <div class="stock-bar-cell">
+                          <div class="mini-bar-track">
+                            <div class="mini-bar-fill" style="width: 12%;"></div>
+                          </div>
+                          <span>12%</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="category-name">Otros</td>
+                      <td>168</td>
+                      <td class="units-val">450</td>
+                      <td>
+                        <div class="stock-bar-cell">
+                          <div class="mini-bar-track">
+                            <div class="mini-bar-fill" style="width: 5%;"></div>
+                          </div>
+                          <span>5%</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Ficha + Team -->
+            <div class="bodega-side-column">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Ficha de la bodega</h3>
+                </div>
+                <div class="ficha-list">
+                  <div class="ficha-item">
+                    <span class="ficha-label">Horario</span>
+                    <span class="ficha-value">Lun-vie · 08:00–18:00</span>
+                  </div>
+                  <div class="ficha-item">
+                    <span class="ficha-label">Superficie</span>
+                    <span class="ficha-value">620 m²</span>
+                  </div>
+                  <div class="ficha-item">
+                    <span class="ficha-label">Capacidad</span>
+                    <span class="ficha-value">10.000 unidades</span>
+                  </div>
+                  <div class="ficha-item">
+                    <span class="ficha-label">Último inventario</span>
+                    <span class="ficha-value">28 sep 2026</span>
+                  </div>
+                </div>
+                <div class="ficha-actions mt-3">
+                  <button class="btn btn-outline full-width" id="btnEditBodegaFicha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                    <span>Editar datos</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="card mt-4">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Equipo asignado</h3>
+                    <p class="card-subtitle">1 jefa · 3 bodegueros</p>
+                  </div>
+                </div>
+                <div class="team-list">
+                  <div class="team-member">
+                    <div class="avatar-small">MH</div>
+                    <div class="member-info">
+                      <div class="member-name">Marina Herrera</div>
+                      <div class="member-role">Jefa de bodega</div>
+                    </div>
+                    <span class="badge badge-active">Activo</span>
+                  </div>
+                  <div class="team-member">
+                    <div class="avatar-small">TV</div>
+                    <div class="member-info">
+                      <div class="member-name">Tomás Vidal</div>
+                      <div class="member-role">Bodeguero</div>
+                    </div>
+                    <span class="badge badge-active">Activo</span>
+                  </div>
+                  <div class="team-member">
+                    <div class="avatar-small">CR</div>
+                    <div class="member-info">
+                      <div class="member-name">Camila Reyes</div>
+                      <div class="member-role">Bodeguera</div>
+                    </div>
+                    <span class="badge badge-active">Activo</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- SCREEN 4: NUEVO TRASLADO                       -->
+        <!-- ============================================== -->
+        <section id="view-traslados" class="view-pane">
+          <div class="view-header">
+            <div class="header-titles">
+              <span class="date-badge">FOLIO BORRADOR TR-0285</span>
+              <h1 class="page-title">Nuevo traslado</h1>
+              <p class="page-subtitle">Mueve existencias entre bodegas con validación de stock y trazabilidad.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-outline" id="btnSaveTransferDraft">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>Guardar borrador</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Stepper Header -->
+          <div class="stepper-bar">
+            <div class="step-item done">
+              <span class="step-num">1</span>
+              <span class="step-text">Origen y destino</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step-item active">
+              <span class="step-num">2</span>
+              <span class="step-text">Seleccionar productos</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step-item">
+              <span class="step-num">3</span>
+              <span class="step-text">Revisar y registrar</span>
+            </div>
+          </div>
+
+          <!-- Transfer Content Grid -->
+          <div class="transfer-layout-grid mt-4">
+            <!-- Left: Route + Product Selection -->
+            <div class="transfer-left-col">
+              <!-- Route Box -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Ruta del traslado</h3>
+                    <p class="card-subtitle">Selecciona bodegas distintas para continuar</p>
+                  </div>
+                </div>
+                <div class="route-selectors">
+                  <div class="route-node">
+                    <label class="route-label">ORIGEN</label>
+                    <div class="route-box">
+                      <div class="route-icon bg-rose">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4M9 21V11h6v10"></path></svg>
+                      </div>
+                      <div class="route-info">
+                        <select id="transferOriginSelect" class="route-dropdown">
+                          <option value="centro" selected>Bodega Centro</option>
+                          <option value="norte">Bodega Norte</option>
+                          <option value="providencia">Providencia</option>
+                          <option value="sur">Bodega Sur</option>
+                        </select>
+                        <span class="route-hint" id="transferOriginStock">BD-001 · 7.860 disponibles</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="route-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+
+                  <div class="route-node">
+                    <label class="route-label">DESTINO</label>
+                    <div class="route-box">
+                      <div class="route-icon bg-slate">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v14M21 7v14M3 7l9-4 9 4M9 21V11h6v10"></path></svg>
+                      </div>
+                      <div class="route-info">
+                        <select id="transferDestSelect" class="route-dropdown">
+                          <option value="providencia" selected>Providencia</option>
+                          <option value="centro">Bodega Centro</option>
+                          <option value="norte">Bodega Norte</option>
+                          <option value="sur">Bodega Sur</option>
+                        </select>
+                        <span class="route-hint" id="transferDestStock">BD-003 · 3.518 disponibles</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product Selection Table -->
+              <div class="card mt-4">
+                <div class="card-header">
+                  <div>
+                    <h3 class="card-title">Productos a trasladar</h3>
+                    <p class="card-subtitle"><span id="transferItemCountLabel">4 productos</span> seleccionados</p>
+                  </div>
+                  <button class="btn btn-outline btn-sm" id="btnAddProductToTransfer">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Agregar desde catálogo</span>
+                  </button>
+                </div>
+
+                <div class="transfer-search-bar">
+                  <div class="search-input-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="transferSearchInput" placeholder="Buscar productos disponibles en Bodega Centro...">
+                    <kbd class="shortcut-badge">⌘ K</kbd>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="transfer-table">
+                    <thead>
+                      <tr>
+                        <th>PRODUCTO</th>
+                        <th class="text-center">DISPONIBLE</th>
+                        <th class="text-right">CANTIDAD</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transferItemsTableBody">
+                      <!-- Populated via JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Summary Card -->
+            <div class="transfer-right-col">
+              <div class="card summary-card">
+                <div class="summary-header">
+                  <h3 class="card-title">Resumen</h3>
+                  <span class="summary-folio">TR-0285 · Borrador</span>
+                </div>
+
+                <div class="summary-stats-box">
+                  <div class="sum-stat">
+                    <span class="sum-num" id="summaryProdCount">4</span>
+                    <span class="sum-lbl">productos</span>
+                  </div>
+                  <div class="sum-stat">
+                    <span class="sum-num" id="summaryUnitCount">24</span>
+                    <span class="sum-lbl">unidades</span>
+                  </div>
+                </div>
+
+                <div class="summary-meta-list">
+                  <div class="meta-row">
+                    <span class="meta-label">Origen</span>
+                    <span class="meta-val" id="summaryOriginText">Bodega Centro</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Destino</span>
+                    <span class="meta-val" id="summaryDestText">Providencia</span>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">Entrega estimada</span>
+                    <span class="meta-val">1 oct 2026</span>
+                  </div>
+                </div>
+
+                <div class="validation-alert" id="transferValidationBox">
+                  <div class="validation-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                  </div>
+                  <div class="validation-text">
+                    <strong>Stock validado</strong>
+                    <p>Las cantidades están disponibles y el destino tiene capacidad suficiente.</p>
+                  </div>
+                </div>
+
+                <div class="authorizer-box">
+                  <div class="avatar-small">MH</div>
+                  <div class="authorizer-info">
+                    <span class="name">Marina Herrera</span>
+                    <span class="role">Autoriza · Jefa de bodega</span>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary full-width mt-3" id="btnSubmitTransfer">
+                  <span>Revisar y registrar</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Transfers Row -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Historial reciente</h3>
+                <p class="card-subtitle">Últimos traslados entre bodegas</p>
+              </div>
+              <a href="#informes" class="card-link" data-view="informes">Ver todos</a>
+            </div>
+            <div class="recent-transfers-grid">
+              <div class="recent-transfer-card">
+                <div class="rt-header">
+                  <span class="rt-code">TR-0284</span>
+                  <span class="badge badge-transit">En tránsito</span>
+                </div>
+                <div class="rt-route">Centro &rarr; Providencia</div>
+                <div class="rt-meta">30 sep · 10:42 · 68 unidades</div>
+              </div>
+
+              <div class="recent-transfer-card">
+                <div class="rt-header">
+                  <span class="rt-code">TR-0283</span>
+                  <span class="badge badge-received">Recibido</span>
+                </div>
+                <div class="rt-route">Norte &rarr; Centro</div>
+                <div class="rt-meta">29 sep · 16:08 · 32 unidades</div>
+              </div>
+
+              <div class="recent-transfer-card">
+                <div class="rt-header">
+                  <span class="rt-code">TR-0282</span>
+                  <span class="badge badge-received">Recibido</span>
+                </div>
+                <div class="rt-route">Sur &rarr; Providencia</div>
+                <div class="rt-meta">29 sep · 11:20 · 18 unidades</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ============================================== -->
+        <!-- SCREEN 5: INFORMES Y ANALÍTICA                -->
+        <!-- ============================================== -->
+        <section id="view-informes" class="view-pane">
+          <div class="view-header">
+            <div class="header-titles">
+              <span class="date-badge">PERÍODO 01–30 SEPTIEMBRE 2026</span>
+              <h1 class="page-title">Informes y analítica</h1>
+              <p class="page-subtitle">Explora movimientos, stock y desempeño por bodega, editorial y tipo.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-primary" id="btnExportReportCSV">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Exportar informe</span>
+              </button>
+              <button class="btn btn-outline" id="btnScheduleReport">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Programar envío</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Report Filters -->
+          <div class="filters-card">
+            <div class="report-filters-grid">
+              <div class="filter-field">
+                <label>Período</label>
+                <select id="reportPeriodSelect">
+                  <option value="sep2026">01–30 sep 2026</option>
+                  <option value="ago2026">01–31 ago 2026</option>
+                  <option value="jul2026">01–31 jul 2026</option>
+                  <option value="q3">Tercer Trimestre 2026</option>
+                </select>
+              </div>
+
+              <div class="filter-field">
+                <label>Bodega</label>
+                <select id="reportBodegaSelect">
+                  <option value="all">Todas las bodegas</option>
+                  <option value="centro">Bodega Centro</option>
+                  <option value="norte">Bodega Norte</option>
+                  <option value="providencia">Providencia</option>
+                  <option value="sur">Bodega Sur</option>
+                </select>
+              </div>
+
+              <div class="filter-field">
+                <label>Editorial</label>
+                <select id="reportEditorialSelect">
+                  <option value="all">Todas las editoriales</option>
+                  <option value="anagrama">Anagrama</option>
+                  <option value="random">Random House</option>
+                  <option value="alfaguara">Alfaguara</option>
+                  <option value="tusquets">Tusquets</option>
+                  <option value="siruela">Siruela</option>
+                </select>
+              </div>
+
+              <div class="filter-field">
+                <label>Tipo de producto</label>
+                <select id="reportProductTypeSelect">
+                  <option value="all">Todos los tipos</option>
+                  <option value="novela">Novela</option>
+                  <option value="ensayo">Ensayo</option>
+                  <option value="memoria">Memoria</option>
+                  <option value="poesia">Poesía</option>
+                </select>
+              </div>
+
+              <div class="filter-field">
+                <label>Movimiento</label>
+                <select id="reportMovementTypeSelect">
+                  <option value="all">Todos</option>
+                  <option value="ingreso">Ingresos</option>
+                  <option value="egreso">Egresos</option>
+                  <option value="traslado">Traslados</option>
+                  <option value="ajuste">Ajustes</option>
+                </select>
+              </div>
+
+              <div class="filter-field-action">
+                <button class="btn btn-primary" id="btnApplyReportFilters">Aplicar filtros</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Analytics Metric Cards -->
+          <div class="kpi-grid mt-4">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Ingresos</span>
+                <div class="kpi-icon-box bg-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value text-emerald">+1.248</div>
+              <div class="kpi-trend positive">
+                <span>+12,4% vs. ago</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Egresos</span>
+                <div class="kpi-icon-box bg-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value text-rose">-862</div>
+              <div class="kpi-trend neutral">
+                <span>+4,8% vs. ago</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Traslados</span>
+                <div class="kpi-icon-box bg-blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value">284</div>
+              <div class="kpi-trend neutral">
+                <span>68 unidades hoy</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Rotación media</span>
+                <div class="kpi-icon-box bg-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value">2,8&times;</div>
+              <div class="kpi-trend positive">
+                <span>+0,3 este mes</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="reports-charts-grid mt-4">
+            <!-- Left Chart: Bar Chart for Inventory Movements -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Movimientos de inventario</h3>
+                  <p class="card-subtitle">Ingresos y egresos · últimos 6 meses</p>
+                </div>
+                <div class="chart-toggle-pill">Mensual</div>
+              </div>
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-color legend-ingreso"></span> Ingresos</span>
+                <span class="legend-item"><span class="legend-color legend-egreso"></span> Egresos</span>
+              </div>
+              <!-- Bar Chart SVG Container -->
+              <div class="bar-chart-container">
+                <div class="bar-chart-bars">
+                  <!-- Abr -->
+                  <div class="month-col">
+                    <div class="bars-pair">
+                      <div class="bar-bar bar-in" style="height: 60%;" title="Abril Ingresos: 980"></div>
+                      <div class="bar-bar bar-out" style="height: 45%;" title="Abril Egresos: 720"></div>
+                    </div>
+                    <span class="month-lbl">Abr</span>
+                  </div>
+                  <!-- May -->
+                  <div class="month-col">
+                    <div class="bars-pair">
+                      <div class="bar-bar bar-in" style="height: 75%;" title="Mayo Ingresos: 1.150"></div>
+                      <div class="bar-bar bar-out" style="height: 50%;" title="Mayo Egresos: 810"></div>
+                    </div>
+                    <span class="month-lbl">May</span>
+                  </div>
+                  <!-- Jun -->
+                  <div class="month-col">
+                    <div class="bars-pair">
+                      <div class="bar-bar bar-in" style="height: 65%;" title="Junio Ingresos: 1.020"></div>
+                      <div class="bar-bar bar-out" style="height: 48%;" title="Junio Egresos: 760"></div>
+                    </div>
+                    <span class="month-lbl">Jun</span>
+                  </div>
+                  <!-- Jul -->
+                  <div class="month-col">
+                    <div class="bars-pair">
+                      <div class="bar-bar bar-in" style="height: 85%;" title="Julio Ingresos: 1.310"></div>
+                      <div class="bar-bar bar-out" style="height: 55%;" title="Julio Egresos: 890"></div>
+                    </div>
+                    <span class="month-lbl">Jul</span>
+                  </div>
+                  <!-- Ago -->
+                  <div class="month-col">
+                    <div class="bars-pair">
+                      <div class="bar-bar bar-in" style="height: 70%;" title="Agosto Ingresos: 1.110"></div>
+                      <div class="bar-bar bar-out" style="height: 52%;" title="Agosto Egresos: 820"></div>
+                    </div>
+                    <span class="month-lbl">Ago</span>
+                  </div>
+                  <!-- Sep -->
+                  <div class="month-col">
+                    <div class="bars-pair">
+                      <div class="bar-bar bar-in active" style="height: 95%;" title="Septiembre Ingresos: 1.248"></div>
+                      <div class="bar-bar bar-out active" style="height: 58%;" title="Septiembre Egresos: 862"></div>
+                    </div>
+                    <span class="month-lbl active">Sep</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Chart: Stock por editorial -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Stock por editorial</h3>
+                  <p class="card-subtitle">Top 5 · unidades disponibles</p>
+                </div>
+              </div>
+              <div class="editorial-bars-list">
+                <div class="editorial-bar-item">
+                  <div class="ed-info">
+                    <span class="ed-name">Anagrama</span>
+                    <span class="ed-val">1.842</span>
+                  </div>
+                  <div class="ed-bar-track">
+                    <div class="ed-bar-fill" style="width: 100%;"></div>
+                  </div>
+                </div>
+
+                <div class="editorial-bar-item">
+                  <div class="ed-info">
+                    <span class="ed-name">Random House</span>
+                    <span class="ed-val">1.568</span>
+                  </div>
+                  <div class="ed-bar-track">
+                    <div class="ed-bar-fill" style="width: 85%;"></div>
+                  </div>
+                </div>
+
+                <div class="editorial-bar-item">
+                  <div class="ed-info">
+                    <span class="ed-name">Alfaguara</span>
+                    <span class="ed-val">1.320</span>
+                  </div>
+                  <div class="ed-bar-track">
+                    <div class="ed-bar-fill" style="width: 71%;"></div>
+                  </div>
+                </div>
+
+                <div class="editorial-bar-item">
+                  <div class="ed-info">
+                    <span class="ed-name">Tusquets</span>
+                    <span class="ed-val">986</span>
+                  </div>
+                  <div class="ed-bar-track">
+                    <div class="ed-bar-fill" style="width: 53%;"></div>
+                  </div>
+                </div>
+
+                <div class="editorial-bar-item">
+                  <div class="ed-info">
+                    <span class="ed-name">Siruela</span>
+                    <span class="ed-val">742</span>
+                  </div>
+                  <div class="ed-bar-track">
+                    <div class="ed-bar-fill" style="width: 40%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: Detalle de Movimientos + Gestión de Roles -->
+          <div class="reports-bottom-grid mt-4">
+            <!-- Left: Detalle Table -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Detalle de movimientos</h3>
+                  <p class="card-subtitle">4 de 2.394 registros</p>
+                </div>
+                <button class="btn-link" id="btnDownloadMovementCSV">Descargar CSV</button>
+              </div>
+              <div class="table-responsive">
+                <table class="report-table">
+                  <thead>
+                    <tr>
+                      <th>FOLIO / FECHA</th>
+                      <th>TIPO</th>
+                      <th>BODEGA</th>
+                      <th>DETALLE</th>
+                      <th>UNIDADES</th>
+                      <th>REGISTRADO POR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="folio-bold">IN-0917</div>
+                        <div class="date-sub">30 sep 2026</div>
+                      </td>
+                      <td><span class="badge badge-success">Ingreso</span></td>
+                      <td>Bodega Centro</td>
+                      <td>Editorial Anagrama</td>
+                      <td class="units-plus">+120</td>
+                      <td>Marina Herrera</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="folio-bold">TR-0284</div>
+                        <div class="date-sub">30 sep 2026</div>
+                      </td>
+                      <td><span class="badge badge-transfer">Traslado</span></td>
+                      <td>Centro &rarr; Providencia</td>
+                      <td>24 productos</td>
+                      <td class="units-neutral">68</td>
+                      <td>Diego Soto</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="folio-bold">AJ-0441</div>
+                        <div class="date-sub">29 sep 2026</div>
+                      </td>
+                      <td><span class="badge badge-neutral">Ajuste</span></td>
+                      <td>Bodega Norte</td>
+                      <td>Conteo físico</td>
+                      <td class="units-minus">-3</td>
+                      <td>Paula León</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="folio-bold">EG-0348</div>
+                        <div class="date-sub">29 sep 2026</div>
+                      </td>
+                      <td><span class="badge badge-critical">Egreso</span></td>
+                      <td>Providencia</td>
+                      <td>Venta sucursal</td>
+                      <td class="units-minus">-42</td>
+                      <td>Camila Reyes</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Gestión de Roles -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Gestión de roles</h3>
+                  <p class="card-subtitle">Permisos sobre informes</p>
+                </div>
+                <button class="btn-link" id="btnAdminRoles">Administrar</button>
+              </div>
+              <div class="roles-list">
+                <div class="role-item">
+                  <div class="role-main">
+                    <span class="role-title">Jefe de bodega</span>
+                    <span class="role-desc">2 personas · Ver, exportar y programar</span>
+                  </div>
+                  <button class="icon-edit-btn" title="Editar permisos">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="role-item">
+                  <div class="role-main">
+                    <span class="role-title">Bodeguero</span>
+                    <span class="role-desc">7 personas · Ver su bodega</span>
+                  </div>
+                  <button class="icon-edit-btn" title="Editar permisos">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 20h9"></path>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="role-info-alert">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <p>Los bodegueros solo consultan movimientos de su ubicación asignada.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: REGISTRAR PRODUCTO                     -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="productModalTitle">Registrar nuevo producto</h3>
+        <button class="modal-close-btn" id="btnCloseProductModal">&times;</button>
+      </div>
+      <form id="productForm">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group span-2">
+              <label for="prodTitle">Título del libro / producto *</label>
+              <input type="text" id="prodTitle" required placeholder="Ej. Pedro Páramo">
+            </div>
+            <div class="form-group">
+              <label for="prodAuthor">Autor(es) *</label>
+              <input type="text" id="prodAuthor" required placeholder="Ej. Juan Rulfo">
+            </div>
+            <div class="form-group">
+              <label for="prodISBN">ISBN / Código *</label>
+              <input type="text" id="prodISBN" required placeholder="978-84-376-0000-0">
+            </div>
+            <div class="form-group">
+              <label for="prodEditorial">Editorial *</label>
+              <select id="prodEditorial" required>
+                <option value="Anagrama">Anagrama</option>
+                <option value="Random House">Random House</option>
+                <option value="Alfaguara">Alfaguara</option>
+                <option value="Cátedra">Cátedra</option>
+                <option value="Siruela">Siruela</option>
+                <option value="Tusquets">Tusquets</option>
+                <option value="Planeta">Planeta</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prodType">Tipo de producto *</label>
+              <select id="prodType" required>
+                <option value="Novela">Novela</option>
+                <option value="Ensayo">Ensayo</option>
+                <option value="Memoria">Memoria</option>
+                <option value="Poesía">Poesía</option>
+                <option value="Infantil">Infantil</option>
+                <option value="Enciclopedia">Enciclopedia</option>
+                <option value="Revista">Revista</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prodStock">Stock inicial *</label>
+              <input type="number" id="prodStock" required min="0" value="10">
+            </div>
+            <div class="form-group">
+              <label for="prodBodega">Bodega destino *</label>
+              <select id="prodBodega" required>
+                <option value="Centro">Bodega Centro</option>
+                <option value="Norte">Bodega Norte</option>
+                <option value="Providencia">Providencia</option>
+                <option value="Sur">Bodega Sur</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btnCancelProductModal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar producto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: REGISTRAR MOVIMIENTO                   -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="movementModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar movimiento de inventario</h3>
+        <button class="modal-close-btn" id="btnCloseMovementModal">&times;</button>
+      </div>
+      <form id="movementForm">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group span-2">
+              <label for="movType">Tipo de movimiento *</label>
+              <select id="movType" required>
+                <option value="Ingreso">Ingreso de mercadería (Proveedor / Editorial)</option>
+                <option value="Traslado">Traslado entre bodegas</option>
+                <option value="Egreso">Egreso / Venta sucursal</option>
+                <option value="Ajuste">Ajuste por inventario físico</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="movBodega">Bodega *</label>
+              <select id="movBodega" required>
+                <option value="Bodega Centro">Bodega Centro</option>
+                <option value="Bodega Norte">Bodega Norte</option>
+                <option value="Providencia">Providencia</option>
+                <option value="Bodega Sur">Bodega Sur</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="movUnits">Cantidad de unidades *</label>
+              <input type="number" id="movUnits" required min="1" value="25">
+            </div>
+            <div class="form-group span-2">
+              <label for="movDetail">Detalle / Documento de respaldo *</label>
+              <input type="text" id="movDetail" required placeholder="Ej. Factura Anagrama #8821 / Guía de despacho">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btnCancelMovementModal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
